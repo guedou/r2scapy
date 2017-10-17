@@ -1,3 +1,4 @@
+#! /usr/bin/env python2
 # Copyright (C) 2017 Guillaume Valadon <guillaume@valadon.net>
 
 """
@@ -37,21 +38,41 @@ def r2scapy(_):
         else:
             length = None
 
+        # Ensure arguments are integers
+        try:
+            address = int(address, 16)
+        except ValueError:
+            print("Error: address '%s' is not a valid hex number !" % address)
+            return 1
+
+        try:
+            length = int(length)
+        except ValueError:
+            print("Error: length '%s' is not a valid integer !" % length)
+            return 1
+
         # Retrieve data from radare2
         if length:
-            command = "p8 %s @ %s" % (length, address)
+            command = "p8 %d @ %d" % (length, address)
         else:
-            command = "p8 @ %s" % address
+            command = "p8 @ %d" % address
         data = R2P.cmd(command)
 
         # Look for a valid Scapy layer
         layer = [l for l in conf.layers if l.__name__ == protocol]
         if not layer:
-            print("Error: '%s' is not a valid Scapy layer !" % protocol)
+            print("Error: protocol '%s' is not a valid Scapy layer !" % protocol)
             return 1
 
-        # Decode the packet
-        print(layer[0](data.decode("hex")).command())
+        # Decode data
+        try:
+            packet = layer[0](data.decode("hex"))
+        except Exception as e:
+            print("Error: an exception occurred while decoding data:\n  %s" % e)
+            return 1
+
+        # Display the command that can produce the same packet
+        print(packet.command())
 
 
     return {"name": "r2scapy",
