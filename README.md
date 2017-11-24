@@ -17,4 +17,4 @@ DNS(aa=1L, qr=1L, an=DNSRR(rclass=32769, ttl=120, rrname='flashair.local.', rdat
 
 ## Prerequisites
 
-`r2scapy` requires the `r2lang`, `r2pipe` (see [r2pm](https://github.com/radare/radare2-pm) and [Scapy](http://scapy.readthedocs.io/en/latest/installation.html) Python modules.
+`r2scapy` requires the `r2lang`, `r2pipe` (see [r2pm](https://github.com/radare/radare2-pm) and [Scapy](http://scapy.readthedocs.io/en/latest/installation.html)) Python modules.
